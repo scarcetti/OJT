@@ -26,22 +26,20 @@ Route::get('/menus', [MenuController::class, 'allMenu'])->name('menus');
 
 Route::group(['prefix' => 'categories'], function (){
     Route::get('add',function () { return view('categories.create'); })->name('addCategory');
+    Route::post('edit/{id}', [CategoryController::class, 'getCategoryById'])->name('editCategory');
     Route::post('update/{id}', [CategoryController::class,'update'])->name('updateCategory');
     Route::get('create', [CategoryController::class,'create'])->name('createCategory');
     Route::get('all', [CategoryController::class,'all'])->name('allCategory');
     Route::delete('delete/{id}', [CategoryController::class,'delete'])->name('deleteCategory');
-
-    // Route::get('/add', function () { return view('categories.create'); })->name('addCategory');
 });
 Route::group(['prefix' => 'menus'], function (){
-    // POST API requests
+    Route::get('add', [MenuController::class,'add'])->name('addMenu');
+    Route::post('edit/{id}', [MenuController::class, 'getMenuById'])->name('editMenu');
+    // Route::get('add', [MenuController::class,'add'])->name('addMenu');
     Route::post('update/{id}', [MenuController::class,'update'])->name('updateMenu');
-    // GET API requests
-    Route::get('create', [MenuController::class,'create'])->name('createMenu');
+    Route::get('create', [MenuController::class, 'create'])->name('createMenu');
+    Route::post('create', [MenuController::class, 'store'])->name('storeMenu');
     Route::get('allMenu', [MenuController::class,'allMenu'])->name('allMenu');
-    // DELETE API requests
     Route::delete('/delete/{id}', [MenuController::class,'delete'])->name('deleteMenu');
-
-    // DISPLAY
-    Route::get('/add', function () { return view('menus.create'); })->name('addMenu');
+    // Route::get('/add', function () { return view('menus.create'); })->name('addMenu');
 });

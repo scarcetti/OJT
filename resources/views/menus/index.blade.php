@@ -21,27 +21,34 @@
                 <th scope="col">Category</th>
                 <th scope="col">Active</th>
                 <th scope="col">Created At</th>
-                <th scope="col">Actions</th>
+                <th scope="col" colspan="2"><center>Actions</center></th>
             </tr>
         </thead>
         <tbody>
-            {{ $menus }}
+            {{-- {{ $menus }} --}}
+            {{-- {{ $categories }} --}}
             @foreach($menus as $menu)
             <tr>
                 <td scope="row">{{ $menu->id }}</td>
                 <td scope="row">{{ $menu->name }}</td>
                 <td scope="row">{{ $menu->desc }}</td>
                 <td scope="row">{{ $menu->price }}</td>
-                <td scope="row">{{ $menu->categoryID }}</td>
+                <td scope="row">{{ $menu['category']['main_course'] }}</td>
                 <td scope="row">{{ $menu->isActive }}</td>
                 <td scope="row">{{ Carbon\Carbon::parse($menu->created_at)->format('F d, Y g:i A') }}</td>
-                {{-- <td>
-                    <a href="{{ route('menu.edit', ['id' => $menu->id])}}" class="btn btn-warning">Edit</a>
-                    <form method="POST" action="{{ route('menu.destroy',['id'=>$menu->id]) }}" style="display: inline">
-                        @csrf
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </td> --}}
+                 <td scope="row" style="width: 4%">
+                        <form action="{{ route('editMenu', ['id' => $menu->id]) }}" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-warning">Edit</button>
+                        </form>
+                    </td>
+                    <td scope="row" style="width: 4%">
+                        <form method="POST" action="{{ route('deleteMenu',['id' => $menu->id]) }}"  style="display: inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"  class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
             </tr>
             @endforeach
         </tbody>

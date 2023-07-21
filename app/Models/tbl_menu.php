@@ -17,8 +17,9 @@ class tbl_menu extends Model
         'categoryID',
         'isActive',
     ];
+    protected $table ='tbl_menus';
     public function category()
     {
-        return $this->belongsTo(tbl_category::class);
+        return $this->belongsTo(tbl_category::class, 'categoryID', 'id');
     }
 }

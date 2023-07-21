@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\tbl_category;
+// use App\Models\tbl_menu;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+
     public function add()
     {
         // $categories = tbl_category::get();
@@ -16,10 +18,6 @@ class CategoryController extends Controller
 
     public function create(Request $request)
     {
-       /*  return tbl_category::create([
-            'main_course' =>$category->main_course,
-            'isActive'=> $category->isActive
-        ]); */
         $category = new tbl_category();
         $category->main_course = $request->main_course;
         $category->isActive = $request->isActive;
@@ -27,19 +25,21 @@ class CategoryController extends Controller
         return redirect()->route('categories');
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $category_data = $request->all();
-        $category = tbl_category::where('id',$request->id)->first();
-        $category->update($category_data);
-        $display = 'categories.update';
-
-        return $category;
+        $validatedData = $request->validate([
+            'main_course' => 'required|string',
+            'isActive' => 'required|in:Yes,No',
+        ]);
+        $category = tbl_category::findOrFail($id);
+        $category->update($validatedData);
+        return redirect()->route('categories')->with('success', 'Category updated successfully!');
     }
-
     public function delete($id)
     {
-        return tbl_category::where('id',$id)->delete();
+        $category = tbl_category::findOrFail($id);
+        $category->delete();
+        return redirect()->route('allCategory');
     }
 
     public function all()
@@ -48,6 +48,11 @@ class CategoryController extends Controller
         $display = 'categories.index';
         return view($display, compact('categories'));
     }
+    public function getCategoryById($id)
+    {
+        $category = tbl_category::findOrFail($id); 
+        return view('categories.create', compact('category'));
+    }
     
     
     public function allID()
@@ -55,6 +60,5 @@ class CategoryController extends Controller
         $categories = tbl_category::get();
         $display = 'menus.create';
         return view($display, compact('categories'));
-       /*  return $categories; */
     }
 }
